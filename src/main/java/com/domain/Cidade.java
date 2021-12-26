@@ -1,23 +1,18 @@
 package com.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Categoria implements Serializable{
+public class Cidade implements Serializable{
+	
 
 	private static final long serialVersionUID = 1L;
 	
@@ -26,18 +21,19 @@ public class Categoria implements Serializable{
 	private Integer id;
 	private String name;
 	
-	@JsonManagedReference
-	@Fetch(FetchMode.JOIN)
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "estado_id")
+	private Estado estado;
 	
-	public Categoria() {
+	public Cidade() {
+		
 	}
 
-	public Categoria(Integer id, String name) {
+	public Cidade(Integer id, String name, Estado estado) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.estado = estado;
 	}
 
 	public Integer getId() {
@@ -55,13 +51,13 @@ public class Categoria implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Produto> getProdutos() {
-		return produtos;
+
+	public Estado getEstado() {
+		return estado;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	@Override
@@ -77,7 +73,7 @@ public class Categoria implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Cidade other = (Cidade) obj;
 		return Objects.equals(id, other.id);
 	}
 }
