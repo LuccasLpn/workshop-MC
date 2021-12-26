@@ -1,6 +1,8 @@
 package com.domain;
 
 import java.io.Serializable;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,13 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 @Entity
-public class Categoria implements Serializable{
+public class Produto implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -23,18 +24,21 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	private Double price;
 	
-	@JsonIgnore
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "tb_categoria", joinColumns = @JoinColumn (name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+	private List<Categoria> categorias = new ArrayList<>();
 	
-	public Categoria() {
+	public Produto() {
+		
 	}
 
-	public Categoria(Integer id, String name) {
+	public Produto(Integer id, String name, Double price) {
 		super();
-		this.id = id;
+		this.id = null;
 		this.name = name;
+		this.price = price;
 	}
 
 	public Integer getId() {
@@ -52,13 +56,23 @@ public class Categoria implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Produto> getProdutos() {
-		return produtos;
+
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	
+	
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	@Override
@@ -74,7 +88,8 @@ public class Categoria implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		return Objects.equals(id, other.id);
 	}
+
 }
