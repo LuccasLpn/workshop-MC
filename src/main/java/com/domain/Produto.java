@@ -1,8 +1,6 @@
 package com.domain;
 
 import java.io.Serializable;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Produto implements Serializable{
 
@@ -26,6 +27,7 @@ public class Produto implements Serializable{
 	private String name;
 	private Double price;
 	
+    @JsonBackReference
 	@ManyToMany
 	@JoinTable(name = "tb_categoria", joinColumns = @JoinColumn (name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
