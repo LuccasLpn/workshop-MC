@@ -1,9 +1,7 @@
 package com.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,7 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.domain.enums.TipoCliente;
+
 @Entity
 public class Cliente implements Serializable {
 
@@ -29,17 +31,18 @@ public class Cliente implements Serializable {
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+    @Fetch(FetchMode.JOIN)
 	@OneToMany(mappedBy = "cliente")
-	private List<Endereco> enderecos = new ArrayList<>();
-	
-	@ElementCollection
-	@CollectionTable(name = "Phone")
-	private Set<String> phone = new HashSet<>();
+	private Set<Endereco> enderecos = new HashSet<>();
+    
+    @Fetch(FetchMode.JOIN)
+    @ElementCollection
+	@CollectionTable(name="TELEFONE")
+	private Set<String> telefones = new HashSet<>();
 	
 	public Cliente() {
-		
 	}
-
+	
 	public Cliente(Integer id, String name, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
 		this.id = id;
@@ -89,20 +92,20 @@ public class Cliente implements Serializable {
 		this.tipo = tipo.getCod();
 	}
 
-	public List<Endereco> getEnderecos() {
+	public Set<Endereco> getEnderecos() {
 		return enderecos;
 	}
 
-	public void setEnderecos(List<Endereco> enderecos) {
+	public void setEnderecos(Set<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
 
-	public Set<String> getPhone() {
-		return phone;
+	public Set<String> getTelefones() {
+		return telefones;
 	}
 
-	public void setPhone(Set<String> phone) {
-		this.phone = phone;
+	public void setTelefones(Set<String> telefones) {
+		this.telefones = telefones;
 	}
 
 	@Override
